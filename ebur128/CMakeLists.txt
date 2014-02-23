@@ -19,11 +19,13 @@ endif()
 
 
 #### speexdsp
+set(EBUR128_PKGCONFIG_SPEEXDSP "")
 if(NOT DISABLE_SPEEXDSP)
     find_pkg_config(SPEEXDSP speexdsp)
     if(SPEEXDSP_FOUND)
         include_directories(SYSTEM ${SPEEXDSP_INCLUDE_DIRS})
         add_definitions(-DUSE_SPEEX_RESAMPLER)
+        set(EBUR128_PKGCONFIG_SPEEXDSP "speexdsp")
     endif()
 endif()
 
@@ -65,3 +67,7 @@ set(EBUR128_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR} CACHE INTERNAL "")
 
 install(FILES ebur128.h DESTINATION ${CMAKE_INSTALL_INCLUDEDIR})
 install(TARGETS ebur128 ebur128_static DESTINATION ${CMAKE_INSTALL_LIBDIR})
+
+# pkg-config file
+configure_file(ebur128.pc.in ebur128.pc @ONLY)
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/ebur128.pc DESTINATION ${CMAKE_INSTALL_LIBDIR}/pkgconfig)
